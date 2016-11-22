@@ -2,9 +2,11 @@
 #include<stdio.h>
 
 using namespace std;
+
 /**
  * Write a program for distance vector algorithm to find suitable path for transmission.
  */
+
 
 // Simple struct to maintain the distance and paths to various nodes from each node
 struct node {

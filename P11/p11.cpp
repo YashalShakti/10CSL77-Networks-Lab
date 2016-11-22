@@ -3,13 +3,20 @@
 
 using namespace std;
 
+/**
+ * Write a program for simple RSA algorithm to encrypt and decrypt the data.
+ *
+ */
+
+// Find the GCD of two numbers
 int gcd(int a, int b) {
   if (a == 0) return b;
   if (b == 0) return a;
   return gcd(b, a % b);
 }
 
-int isprime(int a) {
+// Check if a number is prime
+int isPrime(int a) {
   if (a == 2 || a == 3) {
     return 1;
   }
@@ -20,73 +27,56 @@ int isprime(int a) {
   return 1;
 }
 
-int encrypt(char ch, int e, int n) {
-  long int temp = ch;
-  for (int i = 1; i < e; i++) {
-    temp = (temp * ch) % n;
-  }
-  return temp;
+// Get a random prime number
+int getPrimeNum() {
+  int p;
+  do {
+    p = rand() % 30;
+  } while (!isPrime(p));
+  return p;
 }
 
-char decrypt(long int ch, int e, int n) {
-  long int temp = ch;
+// Used for encrypting and decrypting - Calculates a^e mod n )
+long int crypt(long int a, int e, int n) {
+  long int temp = a;
   for (int i = 1; i < e; i++) {
-    temp = (temp * ch) % n;
+    temp = (temp * a) % n;
   }
   return temp;
 }
 
 int main() {
   char text[50];
+  long int cipher[50], p, q, phi, e, d, n;
 
   cout << "Enter the text to be encrypted \n";
   cin >> text;
-  int len = strlen(text);
 
-  long int p, q, phi, e, d, n, cipher[50];
-
-  // Find p
-  do {
-    p = rand() % 30;
-  } while (!isprime(p));
-
-  // Find q
-  do {
-    q = rand() % 30;
-  } while (!isprime(q));
-
+  // Find p, q, n and phi
+  p = getPrimeNum();
+  q = getPrimeNum();
   n = p * q;
   phi = (p - 1) * (q - 1);
 
   // Find e
   do {
     e = rand() % phi;
-  } while (gcd(phi, e) != 1);
+  } while (gcd(e, phi) != 1);
 
   // Find d
   do {
     d = rand() % phi;
   } while ((d * e) % phi != 1);
 
-  cout << "\n\nTwo prime numbers (p and q) are: " << p << " and " << q << endl;
-  cout << "n(p*q) = " << p << " * " << q << " = " << p * q << endl;
-  cout << "Φ(p-1)(q-1) = (" << p << "-1) * (" << q << "-1) = " << (p - 1) * (q - 1) << endl;
-  cout << "Public key (n, e): (" << n << ", " << e << ")\n";
-  cout << "Private key (Φ, d): (" << phi << ", " << d << ")\n";
-
+  int len = strlen(text);
+  cout << "\nEncrypted message: ";
   for (int i = 0; i < len; i++) {
-    cipher[i] = encrypt(text[i], e, n);
-  }
-
-  cout << "\n\nEncrypted message: ";
-  for (int i = 0; i < len; i++)
+    cipher[i] = crypt(text[i], e, n); // Encrypt
     cout << cipher[i];
-
-  for (int i = 0; i < len; i++) {
-    text[i] = decrypt(cipher[i], d, n);
+    text[i] = crypt(cipher[i], d, n); // Decrypt
   }
+  text[len] = '\0'; // Append null to print as a string
 
-  text[len] = '\0';
   cout << "\nDecrypted message: " << text << endl;
   return 0;
 }
