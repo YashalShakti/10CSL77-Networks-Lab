@@ -2,14 +2,18 @@
 #include<stdio.h>
 
 using namespace std;
+/**
+ * Write a program for distance vector algorithm to find suitable path for transmission.
+ */
 
+// Simple struct to maintain the distance and paths to various nodes from each node
 struct node {
-  int dist[20];
-  int from[20];
-} rt[10];
+  int distanceTo[20];
+  int pathTo[20];
+} nodes[10];
 
 int main() {
-  int n, distance_matrix[20][20], flag = 1;
+  int n, distanceMatrix[20][20], flag = 1;
 
   cout << "Enter the number of nodes \n";
   cin >> n;
@@ -17,23 +21,22 @@ int main() {
   cout << "Enter the distance matrix \n";
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
-      cin >> distance_matrix[i][j];
-      rt[i].dist[j] = distance_matrix[i][j];
-      rt[i].from[j] = j;
+      cin >> distanceMatrix[i][j];
+      nodes[i].distanceTo[j] = distanceMatrix[i][j];
+      nodes[i].pathTo[j] = j;
     }
   }
 
-  cout << "Calculating\n";
-
+  // Use flag to check if any better path was found and continue until there is no better path
   while (flag) {
     flag = 0;
 
     for (int i = 0; i < n; i++) {
       for (int j = 0; j < n; j++) {
         for (int k = 0; k < n; k++) {
-          if (rt[i].dist[j] > distance_matrix[i][k] + rt[k].dist[j]) {
-            rt[i].dist[j] = distance_matrix[i][k] + rt[k].dist[j];
-            rt[i].from[j] = k;
+          if (nodes[i].distanceTo[j] > distanceMatrix[i][k] + nodes[k].distanceTo[j]) {
+            nodes[i].distanceTo[j] = distanceMatrix[i][k] + nodes[k].distanceTo[j];
+            nodes[i].pathTo[j] = k;
             flag = 1;
           }
         }
@@ -42,9 +45,9 @@ int main() {
   }
 
   for (int i = 0; i < n; i++) {
-    cout << "\nRouting table for router" << i + 1 << ":\nDest\tNextHop\tDist\n";
+    cout << "\nRouting table for router " << i + 1 << ":\nDest.\tNextHop\tDist.\n";
     for (int j = 0; j < n; j++)
-      printf("%d\t%d\t%d\n", j + 1, rt[i].from[j] + 1, rt[i].dist[j]);
+      printf("%d\t%d\t%d\n", j + 1, nodes[i].pathTo[j] + 1, nodes[i].distanceTo[j]);
   }
 
   int src, dest;
@@ -53,7 +56,20 @@ int main() {
 
   src--;
   dest--;
-  printf("Shortest path : \n Via router : %d\n Shortest distance : %d \n", rt[src].from[dest] + 1, rt[src].dist[dest]);
-  return 0;
+  printf("Shortest path : \n Via router : %d\n Shortest distance : %d \n",
+         nodes[src].pathTo[dest] + 1,
+         nodes[src].distanceTo[dest]);
 
+  return 0;
 }
+
+/*
+ * Sample input
+ *
+  Enter the number of nodes
+  3
+  Enter the distance matrix
+  0 3 2
+  2 0 5
+  2 2 0
+ */
