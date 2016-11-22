@@ -3,12 +3,22 @@
 #include<string.h>
 using namespace std;
 
-int crc(char input[], char output[], const char gp[], int mode) {
+/**
+ * Write a program for error detecting code using CRC-CCITT (16-bits)
+ *
+ * @param gp - Generator polynomial
+ * @param mode - mode==1 for calculating/sending and mode==0 for testing/receiving
+ * @param input - The input binary string ( Sent or received binary string )
+ * @param output - The transmitted message for mode==1
+ * @return - For mode==0; return 1 if there is no error or 0 otherwise
+ */
+
+int crc(const char gp[], int mode, char input[], char output[]) {
 
   // Copy input string to output string
   strcpy(output, input);
 
-  // There are two modes Mode==1 for calculating/sending and Mode==0 for testing/receiving
+  // There are two modes as specified above
   // For Mode==1 0's are appended to the output string (Equal to 1 less than length of GP)
   if (mode) {
     for (int i = 1; i < strlen(gp); i++) {
@@ -53,10 +63,10 @@ int main() {
 
   // The checksum calculated will be the 'output' excluding the 'input'; ie. by ignoring the first 'strlen(input)' chars
   cout << "\nThe checksum calculated is " << (output + strlen(input));
-  cout << "\nThe message sent is " << input << (output + strlen(input)) << endl;
+  cout << "\nThe message sent is " << input << (output + strlen(input));
 
-  // If the received messages is same as the one sent it will not give error
-  cout << "\nEnter the received message\n";
+  // If the received messages is same as the one sent it will not show any error
+  cout << "\n\nEnter the received message\n";
   cin >> receive;
 
   // Check if the received message has any error
@@ -66,5 +76,5 @@ int main() {
     cout << "\nThe message has error\n";
   }
 
-  return 0;
+  return 1;
 }
