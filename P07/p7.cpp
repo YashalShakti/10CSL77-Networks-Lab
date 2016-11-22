@@ -11,6 +11,7 @@ using namespace std;
  * @param input - The input binary string ( Sent or received binary string )
  * @param output - The transmitted message for mode==1
  * @return - For mode==0; return 1 if there is no error or 0 otherwise
+ * 
  */
 
 int crc(const char gp[], int mode, char input[], char output[]) {

@@ -2,11 +2,13 @@
 #include <iomanip>
 using namespace std;
 
+/**
+ * Write a program for congestion control using Leaky bucket algorithm.
+ *
+ */
+
 int min(int x, int y) {
-  if (x < y)
-    return x;
-  else
-    return y;
+  return x < y ? x : y;
 }
 
 int main() {
@@ -20,13 +22,11 @@ int main() {
   cin >> time;
 
   for (i = 1; i <= time; i++) {
-    cout << "\tEnter number of packets at time " << i << ": ";
+    cout << "Enter number of packets at time " << i << ": ";
     cin >> in[i];
   }
 
-  cout << "----------------------------------------------" << endl;
-  cout << "Time |" << " Incomming |" << " Outgoing |" << " InBucket |" << " Drop " << endl;
-  cout << "----------------------------------------------" << endl;
+  cout << "\nTime |" << " Incoming |" << " Outgoing |" << " InBucket |" << " Drop " << endl;
 
   for (i = 1; i <= time; i++) {
     count += in[i];
@@ -44,12 +44,13 @@ int main() {
     }
     cout << endl;
   }
+
   for (; count != 0; i++) {
     drop = 0;
     sent = min(count, rate);
     count -= sent;
     cout << setw(3) << i << setw(9) << "0" << setw(11) << sent << setw(11) << count << setw(9) << drop << endl;
   }
-  cout << "----------------------------------------------" << endl;
+
   return 0;
 }
