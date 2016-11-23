@@ -11,7 +11,7 @@ using namespace std;
  * @param input - The input binary string ( Sent or received binary string )
  * @param output - The transmitted message for mode==1
  * @return - For mode==0; return 1 if there is no error or 0 otherwise
- * 
+ *
  */
 
 int crc(const char gp[], int mode, char input[], char output[]) {
@@ -60,7 +60,7 @@ int main() {
   cout << "\nEnter the message in binary\n";
   cin >> input;
 
-  crc(input, output, gp, 1);
+  crc(gp, 1, input, output);
 
   // The checksum calculated will be the 'output' excluding the 'input'; ie. by ignoring the first 'strlen(input)' chars
   cout << "\nThe checksum calculated is " << (output + strlen(input));
@@ -71,7 +71,7 @@ int main() {
   cin >> receive;
 
   // Check if the received message has any error
-  if (crc(receive, output, gp, 0)) {
+  if (crc(gp, 0, receive, output)) {
     cout << "\nThe message has no error\n";
   } else {
     cout << "\nThe message has error\n";
